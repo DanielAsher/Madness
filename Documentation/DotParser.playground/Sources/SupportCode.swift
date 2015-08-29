@@ -4,13 +4,13 @@
 
 import Cocoa
 
-var str = "Hello, playground"
-
 let bundle = NSBundle.mainBundle()
 
 let myFilePath = bundle.pathForResource("SimpleGraph", ofType: "dot")
 
-public var dotString : String = {   
+public var fullDotString : String = {   
     var error:NSError?
     return String(contentsOfFile:myFilePath!, 
         encoding:NSUTF8StringEncoding, error: &error)! }()
+        
+

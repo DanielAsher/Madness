@@ -6,36 +6,30 @@ import Madness
 let digit = %("0"..."9")
 let lower = %("a"..."z")
 let upper = %("A"..."Z")
-let leftBrace = "{"
-let rightBrace = "}"
 let space = " "
 let linefeed = "\n"
+let leftBrace = "{"
+let rightBrace = "}"
+let arrow = "->"
  
 let alphaNumeric = (lower | upper | digit)+ |> map { "".join($0) }
 let whitespace = ignore( %space | %linefeed )
 let spaces = whitespace+
 
-let token = spaces ++ alphaNumeric+ ++ spaces 
-let digraph = %("digraph")
+let token = spaces ++ alphaNumeric ++ spaces 
+let digraph = %("digraph") ++ token |> map { (graph, name) in "\(graph) \(name)" } 
+let node = token
+let edge = node ++ %arrow ++ node |> map { (source, dest) in "\(source) \(dest.0) \(dest.1)" }
 
-let scopeStart  = spaces ++ %leftBrace ++ spaces 
-let scopeEnd    = spaces ++ %rightBrace ++ spaces
+let scope = ignore(%leftBrace) ++ (edge | token) ++ ignore(%rightBrace) ++ spaces*
 
-let scope = %leftBrace ++ token ++ %rightBrace ++ spaces
+let dotParser = digraph ++ scope
 
-let dotParser = digraph ++ token ++ scope
+let output = parse(dotParser, fullDotString)
 
-let result = parse(dotParser, "digraph Limore { Hello } ")
-
-
-let value = result.right
-if let v = value {
-    "\(v)"
+if let result = output.right {
+    "\(result)"
     } else {
- let error = result.left?.description   
+ let error = output.left?.description   
 }
-
- 
-let fullParse = parse(dotParser, dotString).left // finished parsing before end of input
-
  
