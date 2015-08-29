@@ -5,6 +5,9 @@
       location = "container:Documentation"
       name = "Documentation">
       <FileRef
+         location = "group:PreludeForParser.playground">
+      </FileRef>
+      <FileRef
          location = "group:Collections.playground">
       </FileRef>
       <FileRef
@@ -15,6 +18,9 @@
       </FileRef>
       <FileRef
          location = "group:Subset of Common Markdown.playground">
+      </FileRef>
+      <FileRef
+         location = "group:DotParser.playground">
       </FileRef>
    </Group>
    <FileRef

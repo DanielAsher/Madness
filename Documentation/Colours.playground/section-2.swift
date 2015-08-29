@@ -16,14 +16,11 @@ let colour: Parser<String, NSColor>.Function = ignore("#") ++ (six | three) |> m
 	NSColor(calibratedRed: $0[0], green: $0[1], blue: $0[2], alpha: 1)
 }
 
-if let reddish = parse(colour, "#d52a41") {
-	reddish
-}
+parse(colour, "#d52a41").right 
 
-if let greenish = parse(colour, "#5a2") {
-	greenish
-}
+parse(colour, "#5a2").right 
 
-if let blueish = parse(colour, "#5e8ca1") {
-	blueish
-}
+parse(colour, "#5e8ca1").right
+
+
+
