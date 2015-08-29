@@ -18,11 +18,11 @@ enum Term: Printable
 
 
 let symbol = %("a"..."z")
+
+
 typealias X = Parser<[Int], Int>.Function
 typealias P = Parser<String, Term>.Function
 typealias T = Parser<String, (Term, Term)>.Function
-
-
 
 let term: P = fix { (term: P) -> P in
 

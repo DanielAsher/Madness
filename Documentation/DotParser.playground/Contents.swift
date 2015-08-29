@@ -1,39 +1,41 @@
 //: Playground - noun: a place where people can play
 
-import Cocoa
-import Madness
 import Prelude
+import Madness
 
-var str = "Hello, playground"
-
-let bundle = NSBundle.mainBundle()
-
-let myFilePath = bundle.pathForResource("SimpleGraph", ofType: "dot")
-
-var dotString : String = {   
-    var error:NSError?
-    return String(contentsOfFile:myFilePath!, 
-                                encoding:NSUTF8StringEncoding, error: &error)! }()
-                                
 let digit = %("0"..."9")
 let lower = %("a"..."z")
 let upper = %("A"..."Z")
+let leftBrace = "{"
+let rightBrace = "}"
 let space = " "
-let linefeed = "\n" 
-let whitespace = %space | %linefeed
+let linefeed = "\n"
+ 
+let alphaNumeric = (lower | upper | digit)+ |> map { "".join($0) }
+let whitespace = ignore( %space | %linefeed )
+let spaces = whitespace+
 
-let alphaNumeric = lower | upper | digit
-
-let token = alphaNumeric+
-
+let token = spaces ++ alphaNumeric+ ++ spaces 
 let digraph = %("digraph")
 
-let a = parse(digraph, dotString).left
-//> {reason "finished parsing before end of input", {value 7}, 0 elements}
-let p = parse(digraph ++ whitespace+, "digraph  ")
-let error = p.left?.description
-let value = p.right
-"\(value!)"
-//let error = p.left?.description
+let scopeStart  = spaces ++ %leftBrace ++ spaces 
+let scopeEnd    = spaces ++ %rightBrace ++ spaces
+
+let scope = %leftBrace ++ token ++ %rightBrace ++ spaces
+
+let dotParser = digraph ++ token ++ scope
+
+let result = parse(dotParser, "digraph Limore { Hello } ")
+
+
+let value = result.right
+if let v = value {
+    "\(v)"
+    } else {
+ let error = result.left?.description   
+}
+
+ 
+let fullParse = parse(dotParser, dotString).left // finished parsing before end of input
 
  
